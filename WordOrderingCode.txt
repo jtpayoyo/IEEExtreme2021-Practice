@@ -1,0 +1,176 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+// Date: Sep 17, 2021
+// Author: Jeanne Payoyo
+// Description: Orders words given lexicography and number of words
+// Link: https://csacademy.com/contest/archive/task/word_ordering/statement/
+// Examples: see WordOrderingExamples.txt
+// Solution grade: 10%, took too much time
+// Future improvement: shorten Dictionary with character case check
+
+class Solution
+{
+    static int Main(string[] args)
+    {
+        // Construct the key-value pairs
+        string firstLine = Console.ReadLine();
+        char[] chars = firstLine.ToCharArray();
+        int numAlpha = 26;
+        Dictionary<int, char> alphabet = new Dictionary<int, char>();
+        for(int i = 0; i < chars.Length; i++)
+        {
+            alphabet.Add(i, chars[i]);
+            alphabet.Add(i + numAlpha, char.ToUpper(chars[i]));
+        }
+        
+
+        // Get list of words
+        int nWords = Convert.ToInt32(Console.ReadLine());
+        char[][] wordChars = new char[nWords][];
+
+        for(int i = 0; i < nWords; i++)
+        {             
+            wordChars[i] = Console.ReadLine().ToCharArray();
+        }
+
+        // Start sorting
+        int check = 0;
+        bool switchWord;
+        char[] wordCharsA;
+        char[] wordCharsB;
+        int indexA;
+        int indexB;
+        
+        while (check != nWords-1)
+        {
+            // reset
+            check = 0;
+            indexA = 0;
+            indexB = 1;
+
+            // stay within nWords
+            while(indexB < nWords)
+            {
+                // Console.WriteLine($"IndexA: {indexA} IndexB: {indexB}");
+                wordCharsA = wordChars[indexA];
+                wordCharsB = wordChars[indexB];
+
+                switchWord = compareAB(alphabet, wordCharsA, wordCharsB);
+                
+                // switch
+                if (switchWord)
+                {
+                    // swap positions
+                    wordChars[indexA] = wordCharsB;
+                    wordChars[indexB] = wordCharsA;
+                    
+                }
+                else
+                {
+                    check++;
+                }
+
+                indexA++;
+                indexB++;
+            } // End of loop
+         
+        }
+
+        printString(wordChars);
+
+        return 0;
+    }
+
+    static void printString(char[][] listWords)
+    {
+        foreach (var myWord in listWords)
+        {
+            string wordPrint = new string(myWord);
+            Console.WriteLine(wordPrint + " ");
+        }
+        Console.WriteLine();
+    }
+
+    static bool compareAB(Dictionary<int, char> alphabet, char[] wordCharsA, char[] wordCharsB)
+    {
+        bool switchAB = false;
+        int charLengthA = wordCharsA.Length;
+        int charLengthB = wordCharsB.Length;
+        int cIndexA = 0;
+        int cIndexB = 0;
+        char charA;
+        char charB;
+        int keyA;
+        int keyB;
+
+        while(cIndexA < charLengthA && cIndexB < charLengthB)
+        {
+            charA = wordCharsA[cIndexA];
+            charB = wordCharsB[cIndexB];
+            keyA = getKeyValue(alphabet, charA);
+            keyB = getKeyValue(alphabet, charB);
+            // move on to next letter
+            if (keyA < keyB)
+            {
+                cIndexA++;
+                cIndexB++;
+                switchAB = false;
+                break;
+            }
+            // switch order
+            else if (keyB < keyA)
+            {
+                switchAB = true;
+                break;
+            }
+            // they're equal
+            else
+            {
+                cIndexA++;
+                cIndexB++;
+            }
+
+            // one reached the end with the same letters
+            // A reached length
+            if (cIndexA == charLengthA)
+            {
+                // B reached length, they are equal
+                if (cIndexB == charLengthB)
+                {
+                    switchAB = false;
+                    break;
+                }
+                // B did not reach length
+                else
+                {
+                    switchAB = false;
+                    break;
+                }
+            }
+            // A did not reach length but B reached length
+            else if (cIndexB == charLengthB)
+            {
+                switchAB = true;
+                break;
+            }
+
+        } // end of while
+
+        return switchAB;
+
+    } // end of compareAB
+
+    static int getKeyValue(Dictionary<int,char> alphabet, char c)
+    {
+        int key = 0;
+        foreach(var pair in alphabet)
+        {
+            if (pair.Value == c)
+                key = pair.Key;
+        }
+        return key;
+    }
+} // end of class
+
