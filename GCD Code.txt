@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+// Date: Sep 17, 2021
+// Author: Jeanne Payoyo
+// Description: Gets greatest common divisor for two numbers
+// Link: https://csacademy.com/contest/archive/task/gcd/
+// Example input: 10 20
+// Example output: 10
+// Solution grade: 100%
+
+class Solution
+    {
+        static void Main(string[] args)
+        {
+            string userInput = Console.ReadLine();
+            string[] userInputTrim = userInput.Split(" ");
+            int a = Convert.ToInt32(userInputTrim[0]);
+            int b = Convert.ToInt32(userInputTrim[1]);
+            int small;
+            int big;
+            int smallD;
+            int divisor=1;
+
+            if (a < b)
+            {
+                small = a;
+                big = b;
+            }
+            else
+            {
+                small = b;
+                big = a;
+            }
+
+            for (int d = 1; d <= small; d++)
+            {
+                if (small % d == 0)
+                {
+                    smallD = small / d;
+                    if (big % smallD == 0)
+                    {
+                        divisor = smallD;
+                        break;
+                    }
+                }
+            }
+
+            Console.WriteLine(divisor);
+
+        } // end of main
+    } // end of class 
