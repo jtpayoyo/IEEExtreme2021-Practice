@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+// Date: Sep 16, 2021
+// Author: Jeanne Payoyo
+// Description: gets sum of the distances to special spaces
+// Link: https://csacademy.com/contest/archive/task/matrix_exploration/
+
+    class Solution
+    {
+        
+        static void Main(String[] args)
+        {
+            string userInput = Console.ReadLine();
+
+            // Initialize N and M
+            string[] firstLine = userInput.Split(" ");
+            short N = Convert.ToInt16(firstLine[0]);
+            short M = Convert.ToInt16(firstLine[1]);
+            short K = Convert.ToInt16(firstLine[2]);
+
+            // Initialize
+            int[,] array = new int[N, M];
+            short[,] lstK = new short[K, 2];
+
+            // Fill array with 0 and 1
+            for (short i = 0; i < N; i++)
+            {
+                char[] rowChar = Console.ReadLine().ToCharArray();
+                for (short j = 0; j < M; j++)
+                {
+                    // Is period
+                    if (rowChar[j] == '.')
+                    {
+                        array[i, j] = 0;
+                    }
+                    // Is hash
+                    else
+                        array[i, j] = -2;
+                }
+            }
+
+            // Fill list of lstK, mark special spaces, and create jagged array
+            int[][,] diff = new int[K][,];
+            for (short m = 0; m < K; m++)
+            {
+                userInput = Console.ReadLine();
+                string[] kSplit = userInput.Split(" ");
+                lstK[m, 0] = Convert.ToInt16(kSplit[0]);
+                lstK[m, 1] = Convert.ToInt16(kSplit[1]);
+                // Mark special
+                array[lstK[m, 0], lstK[m, 1]] = -1;
+                // Set jagged array
+                diff[m] = array;
+            }
+
+            // Check each special
+            for (short k = 0; k < K; k++)
+            {
+                // Start search
+
+
+            }
+
+
+        } // end of main
+
+        // Print 2D table
+        static void printTable(int[,] table)
+        {
+            int rows = table.GetLength(0);
+            int cols = table.GetLength(1);
+
+            for(int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    Console.Write(table[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+
+    } // end of class
+
